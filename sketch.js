@@ -19,8 +19,8 @@ function preload() {
     block3Img = loadImage("rod3.png");
     block4Img = loadImage("rod4.png");
     birdImg = loadImage("flappybird.png");
-    gameoverImg = loadImage("gameover1.png");
-    resetImg = loadImage("reset3.png");
+    gameoverImg = loadImage("game.png");
+    resetImg = loadImage("reset.png");
     blockGroup = new Group();
     invGroup = new Group();
     wing = loadSound("sfx_wing.mp3");
@@ -42,11 +42,11 @@ function setup() {
     inv.visible = false;
     gameover = createSprite(280,205,30,30);
     gameover.addImage(gameoverImg);
-    gameover.scale = 0.7;
+    gameover.scale = 0.9;
     gameover.visible = false;
     reset = createSprite(280,270,30,30);
     reset.addImage(resetImg);
-    reset.scale = 0.06;
+    reset.scale = 0.2   ;
     reset.visible = false;
     text1 = createSprite(290,200,50,50);
     text1.addImage(textImg);
@@ -92,6 +92,7 @@ function draw() {
 
     if(gameState === 1 && bird.y<0 || bird.y>410){
         gameState = 2;
+        hit.play();
     }
 
     score1();
@@ -110,12 +111,15 @@ function draw() {
        score = score+1;
    }
 
-   if(mousePressedOver(play)){
+   if(mousePressedOver(play)|| touches.length>0  ){
        gameState = 1;
+        touches = [];
    }
+   
     
-    if(mousePressedOver(reset)){
+    if(mousePressedOver(reset)|| touches.length>0){
         reste1();
+         touches = [];
     }
     drawSprites();
     if(gameState === 1){
@@ -225,7 +229,7 @@ function blocks5() {
 }
 function score1(){
     if(frameCount % 40 === 0 && gameState === 1){
-        inv2 = createSprite(600,225,30,500);
+        inv2 = createSprite(600,225,0.000,500);
         inv2.velocityX = -5;
         inv2.visible = false;
         inv2.lifetime = 200;
@@ -236,9 +240,10 @@ function score1(){
 
 function keyPressed() {
     
-    if (keyCode === 32 && gameState === 1) {
+    if (keyCode === 32||touches.lenght>0 && gameState === 1) {
         bird.velocityY = -7;
         wing.play();
+        touches = [];
     }
 }
 function reste1(){
